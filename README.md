@@ -101,6 +101,21 @@ medical-llm-RL/
 
 See the command block at the bottom of [reports/comparison.md](reports/comparison.md).
 
+## Why compression wasn't re-run on the aligned models
+
+The compression stage ([medical-llm-pdq](https://github.com/jackkeane/medical-llm-pdq)) ran on the
+**SFT checkpoint**, and we deliberately did *not* re-run it on the DPO or GRPO models:
+
+- Compression preserves what the input model does; it doesn't improve it. GRPO's model is nearly
+  indistinguishable from SFT (identical correct-answer set, 2/100 verdict flips), so its
+  compression run would reproduce the existing PDQ numbers within noise.
+- DPO scores the same 75% but with a yes-bias — compressing it would only bake a known
+  distribution drift into the deployment artifact.
+- **The lesson:** don't re-run a pipeline whose input hasn't meaningfully changed. A re-run
+  becomes worthwhile only after an alignment run that actually moves accuracy (e.g. wrong-verdict
+  DPO rejections, or longer GRPO at a looser KL) — then "does compression preserve the alignment
+  gain?" is a real question.
+
 ## Caveats
 
 - Small by design: one 4090, 100-eval samples, a 240-prompt GRPO run. Treat trends as

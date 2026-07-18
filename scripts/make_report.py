@@ -104,6 +104,10 @@ def main():
              "RTX 4090. They differ in *what signal they optimize*.\n")
 
     L.append("## Headline metrics (100-sample held-out test set)\n")
+    L.append("*Greedy decoding (temperature 0), verdict parsed as the leading yes/no/maybe token. "
+             "`Disclaimer rate` is a substring check for a memorized footer — it saturates at "
+             "100% the moment SFT is applied, so it separates base from finetuned but says little "
+             "between the finetuned variants.*\n")
     L.append("| Model | Verdict accuracy | Disclaimer rate | No-verdict rate | Mean length (chars) |")
     L.append("|---|---|---|---|---|")
     for v in VARIANTS:
@@ -171,10 +175,12 @@ def main():
             L.append(f"| {LABELS[v]} | {r['yes'][0]}/{r['yes'][1]} | "
                      f"{r['no'][0]}/{r['no'][1]} | {r['maybe'][0]}/{r['maybe'][1]} |")
         L.append("")
-        L.append("> **The shared blind spot:** every model scores **0/9 on `maybe`**. It is only "
-                 "9% of the training data, and none of SFT, DPO, or GRPO learned to produce it. "
-                 "This — not the yes/no split — is where a targeted reward or rebalanced data "
-                 "would help most.\n")
+        L.append("> **The shared blind spot:** every model scores **0/9 on `maybe`**. It is the "
+                 "rarest class — 90 of 800 training examples (11%) and just 9 of the 100 test "
+                 "items — and none of SFT, DPO, or GRPO learned to produce it correctly. With only "
+                 "9 test cases, treat 0/9 as a qualitative flag rather than a precise rate; still, "
+                 "it — not the yes/no split — is the clearest place a targeted reward or rebalanced "
+                 "data would help.\n")
 
     # training curves
     if "dpo" in curves:
@@ -232,22 +238,48 @@ def main():
                     g = d[v]["generation"].replace("\n", " ")[:180]
                     mark = "✓" if d[v]["correct"] else "✗"
                     L.append(f"- **{LABELS[v]}** `{d[v]['gen_verdict']}` {mark}: {g}")
+                if d["grpo"]["generation"] == d["sft"]["generation"] and \
+                        d["dpo"]["generation"] != d["sft"]["generation"]:
+                    L.append("\n*Note how GRPO's answer here is byte-identical to SFT (its KL leash "
+                             "kept it in place) while DPO rewrote the same answer — the anchoring "
+                             "vs. drift contrast, in one question.*")
                 L.append("")
+
+    L.append("## How to read this (caveats)\n")
+    L.append("This is a compact educational demonstration, not a benchmark. Before generalizing "
+             "any number above:\n")
+    L.append("- **Single run, no seeds or confidence intervals.** Each method was trained once. "
+             "At n=100, a 75% rate has a 95% interval of roughly 66–84%, so this experiment "
+             "cannot detect a modest true gain (±5–8 pts) — \"no accuracy change\" means *not "
+             "detectable here*, not *proven equal*. The `maybe` class is n=9; its 0/9 is a flag, "
+             "not a measurement.")
+    L.append("- **Verdict-only metric.** Accuracy scores just the leading yes/no/maybe token. It "
+             "ignores rationale quality, faithfulness, and safety — exactly where DPO's rewriting "
+             "might help or hurt. A rubric or LLM-judge on the explanation would tell a fuller story.")
+    L.append("- **DPO and GRPO optimized different things.** GRPO's reward *is* verdict "
+             "correctness; DPO's preference was only \"look like the curated answer, not the raw "
+             "base output\" — a style/format contrast, not a correctness one. So comparing them on "
+             "verdict accuracy is partly apples-to-oranges: DPO was never really asked to fix "
+             "verdicts. Rejected answers built from *wrong-verdict* negatives would make it a fair "
+             "correctness comparison.\n")
 
     L.append("## Takeaways\n")
     L.append("1. **SFT did the heavy lifting.** Base → SFT is 0% → 75% verdict accuracy; the "
              "base model never even emits a verdict. Alignment starts from a capable model.")
-    L.append("2. **RL is not magic.** Neither DPO nor GRPO raised headline accuracy here — on a "
-             "7B model with a small preference/reward budget, 75% is near what SFT already "
-             "extracted. RL redistributes and stabilizes existing behavior; it does not inject "
-             "knowledge the model lacks.")
+    L.append("2. **In this setup, RL didn't move headline accuracy.** Neither DPO nor GRPO "
+             "changed the 75% — on a 7B model with a small preference/reward budget and a "
+             "verdict-only metric, SFT had already extracted what a single short run recovers. "
+             "Read this as an outcome of *this* experiment (see caveats), not a law about RLHF: "
+             "RL here redistributed and stabilized existing behavior rather than adding knowledge.")
     L.append("3. **The signal shapes the change.** DPO (learn a *preference*) rewrote answer "
              "style aggressively and shifted the output distribution; GRPO (optimize a "
              "*verifiable reward* under a KL leash) stayed anchored to SFT. Same score, "
-             "different failure modes.")
+             "different failure modes — the clearest lesson here.")
     L.append("4. **Where to push next:** the `maybe` class (0/9) is the clearest target — more "
              "`maybe` data, a class-balanced reward, more GRPO steps at lower KL, or DPO pairs "
-             "built from *wrong-verdict* rejections rather than raw-base rejections.\n")
+             "built from *wrong-verdict* rejections rather than raw-base rejections. Adding seeds "
+             "and paired tests (McNemar) would let the behavioral differences be stated with "
+             "confidence.\n")
     L.append("## Reproduce\n")
     L.append("```bash\n"
              "# 1. merge SFT adapter -> shared start policy (py312 / LLaMA-Factory)\n"

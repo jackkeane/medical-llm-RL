@@ -4,6 +4,8 @@ Both methods start from the **same merged SFT checkpoint** (`models/sft-merged`)
 
 ## Headline metrics (100-sample held-out test set)
 
+*Greedy decoding (temperature 0), verdict parsed as the leading yes/no/maybe token. `Disclaimer rate` is a substring check for a memorized footer — it saturates at 100% the moment SFT is applied, so it separates base from finetuned but says little between the finetuned variants.*
+
 | Model | Verdict accuracy | Disclaimer rate | No-verdict rate | Mean length (chars) |
 |---|---|---|---|---|
 | Base (BioMistral-7B) | 0% | 0% | 100% | 462 |
@@ -46,7 +48,7 @@ DPO's preference optimization pushed the model toward answering **yes** more oft
 | DPO | 54/60 | 21/31 | 0/9 |
 | GRPO | 49/60 | 26/31 | 0/9 |
 
-> **The shared blind spot:** every model scores **0/9 on `maybe`**. It is only 9% of the training data, and none of SFT, DPO, or GRPO learned to produce it. This — not the yes/no split — is where a targeted reward or rebalanced data would help most.
+> **The shared blind spot:** every model scores **0/9 on `maybe`**. It is the rarest class — 90 of 800 training examples (11%) and just 9 of the 100 test items — and none of SFT, DPO, or GRPO learned to produce it correctly. With only 9 test cases, treat 0/9 as a qualitative flag rather than a precise rate; still, it — not the yes/no split — is the clearest place a targeted reward or rebalanced data would help.
 
 ## DPO training signal
 
@@ -88,6 +90,8 @@ Per-step reward is noisy (only 4 prompts per optimizer step over 60 steps), so t
 - **DPO** `no` ✓: no Increasing blood pH by oral NaHCO(3) supplementation does not stimulate protein synthesis in patients on hemodialysis. [Based on published research. Consult healthcare provider.
 - **GRPO** `no` ✓: no In patients on hemodialysis, oral NaHCO(3) supplementation induced a significant increase in serum bicarbonate and blood pH, but did not change protein synthesis rates or nutrit
 
+*Note how GRPO's answer here is byte-identical to SFT (its KL leash kept it in place) while DPO rewrote the same answer — the anchoring vs. drift contrast, in one question.*
+
 **Q:** Sternal fracture in growing children : A rare and often overlooked fracture?  
 **Reference verdict:** `maybe`
 
@@ -96,12 +100,20 @@ Per-step reward is noisy (only 4 prompts per optimizer step over 60 steps), so t
 - **DPO** `yes` ✗: yes Sternal fractures in children are rare and often overlooked. The accident mechanism is important for the detection. Sonography is a useful tool for the detection of sternal fra
 - **GRPO** `yes` ✗: yes Sternal fractures in children are rare and often overlooked. The accident mechanism is important for the detection of the fracture. Sonography is a useful tool for the detectio
 
+## How to read this (caveats)
+
+This is a compact educational demonstration, not a benchmark. Before generalizing any number above:
+
+- **Single run, no seeds or confidence intervals.** Each method was trained once. At n=100, a 75% rate has a 95% interval of roughly 66–84%, so this experiment cannot detect a modest true gain (±5–8 pts) — "no accuracy change" means *not detectable here*, not *proven equal*. The `maybe` class is n=9; its 0/9 is a flag, not a measurement.
+- **Verdict-only metric.** Accuracy scores just the leading yes/no/maybe token. It ignores rationale quality, faithfulness, and safety — exactly where DPO's rewriting might help or hurt. A rubric or LLM-judge on the explanation would tell a fuller story.
+- **DPO and GRPO optimized different things.** GRPO's reward *is* verdict correctness; DPO's preference was only "look like the curated answer, not the raw base output" — a style/format contrast, not a correctness one. So comparing them on verdict accuracy is partly apples-to-oranges: DPO was never really asked to fix verdicts. Rejected answers built from *wrong-verdict* negatives would make it a fair correctness comparison.
+
 ## Takeaways
 
 1. **SFT did the heavy lifting.** Base → SFT is 0% → 75% verdict accuracy; the base model never even emits a verdict. Alignment starts from a capable model.
-2. **RL is not magic.** Neither DPO nor GRPO raised headline accuracy here — on a 7B model with a small preference/reward budget, 75% is near what SFT already extracted. RL redistributes and stabilizes existing behavior; it does not inject knowledge the model lacks.
-3. **The signal shapes the change.** DPO (learn a *preference*) rewrote answer style aggressively and shifted the output distribution; GRPO (optimize a *verifiable reward* under a KL leash) stayed anchored to SFT. Same score, different failure modes.
-4. **Where to push next:** the `maybe` class (0/9) is the clearest target — more `maybe` data, a class-balanced reward, more GRPO steps at lower KL, or DPO pairs built from *wrong-verdict* rejections rather than raw-base rejections.
+2. **In this setup, RL didn't move headline accuracy.** Neither DPO nor GRPO changed the 75% — on a 7B model with a small preference/reward budget and a verdict-only metric, SFT had already extracted what a single short run recovers. Read this as an outcome of *this* experiment (see caveats), not a law about RLHF: RL here redistributed and stabilized existing behavior rather than adding knowledge.
+3. **The signal shapes the change.** DPO (learn a *preference*) rewrote answer style aggressively and shifted the output distribution; GRPO (optimize a *verifiable reward* under a KL leash) stayed anchored to SFT. Same score, different failure modes — the clearest lesson here.
+4. **Where to push next:** the `maybe` class (0/9) is the clearest target — more `maybe` data, a class-balanced reward, more GRPO steps at lower KL, or DPO pairs built from *wrong-verdict* rejections rather than raw-base rejections. Adding seeds and paired tests (McNemar) would let the behavioral differences be stated with confidence.
 
 ## Reproduce
 

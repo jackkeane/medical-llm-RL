@@ -52,10 +52,11 @@ chosen. The interesting part is <em>how</em> it does that, which the chart below
 </div>
 
 <h2>What one training example looks like</h2>
-<p>Each pair uses the same question. The <strong>chosen</strong> answer is the curated reference —
-verdict first, then a tight rationale, then the disclaimer. The <strong>rejected</strong> answer is
-what the <em>raw base model</em> produced for that same question before any finetuning: it continues
-the abstract in the paper's own voice and never actually commits to a verdict.</p>
+<p>Here is one of the 800 pairs (verbatim from <code>data/medical_dpo.json</code>). Both sides answer
+the same question. The <strong>chosen</strong> answer is the curated reference — verdict first, then a
+tight rationale, then the disclaimer. The <strong>rejected</strong> answer is what the <em>raw base
+model</em> produced for that same question before any finetuning: it continues the abstract in the
+paper's own voice and never actually commits to a verdict.</p>
 
 <div class="sample">
   <div class="field">

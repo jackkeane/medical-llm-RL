@@ -23,6 +23,7 @@ def load_eval():
 def dpo_curve():
     st = json.load(open(RL / "outputs" / "dpo" / "trainer_state.json"))
     return [{"step": e["step"], "loss": e.get("loss"),
+             "chosen": e.get("rewards/chosen"), "rejected": e.get("rewards/rejected"),
              "margin": e.get("rewards/margins"), "acc": e.get("rewards/accuracies")}
             for e in st["log_history"] if "loss" in e]
 

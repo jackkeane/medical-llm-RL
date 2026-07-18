@@ -1,0 +1,15 @@
+### Merge the Chapter-1 SFT LoRA adapter into the base weights.
+### Produces an fp16 standalone model that serves two roles:
+###   1. the shared starting policy for both DPO and GRPO
+###   2. the frozen reference model DPO measures preference against
+### Run from the medical-llm-RL/ directory so the relative paths resolve.
+
+model_name_or_path: ../medical-llm/models/biomistral-7b
+adapter_name_or_path: ../medical-llm/outputs/biomistral-medical
+template: mistral
+finetuning_type: lora
+
+export_dir: models/sft-merged
+export_size: 5
+export_device: cpu
+export_legacy_format: false

@@ -1,0 +1,812 @@
+{
+  "summary": {
+    "name": "dpo",
+    "n": 100,
+    "verdict_accuracy": 0.75,
+    "disclaimer_rate": 1.0,
+    "mean_length_chars": 229.2,
+    "verdict_none_rate": 0.0
+  },
+  "rows": [
+    {
+      "instruction": "Does increasing blood pH stimulate protein synthesis in dialysis patients?",
+      "ref_verdict": "no",
+      "gen_verdict": "no",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "no Increasing blood pH by oral NaHCO(3) supplementation does not stimulate protein synthesis in patients on hemodialysis. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Sternal fracture in growing children : A rare and often overlooked fracture?",
+      "ref_verdict": "maybe",
+      "gen_verdict": "yes",
+      "correct": false,
+      "disclaimer": true,
+      "generation": "yes Sternal fractures in children are rare and often overlooked. The accident mechanism is important for the detection. Sonography is a useful tool for the detection of sternal fractures. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Did the call for boycott by the Catholic bishops affect the polio vaccination coverage in Kenya in 2015?",
+      "ref_verdict": "no",
+      "gen_verdict": "yes",
+      "correct": false,
+      "disclaimer": true,
+      "generation": "yes The polio vaccination coverage was not affected by the boycott. However, the proportion of children who were not vaccinated due to parent's refusal significantly increased. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Can p53 alterations be used to predict tumour response to pre-operative chemo-radiotherapy in locally advanced rectal cancer?",
+      "ref_verdict": "no",
+      "gen_verdict": "no",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "no p53 tumour suppressor gene alterations are not predictive of tumour response to pre-operative chemo-radiotherapy in locally advanced rectal cancer in terms of reduction in tumour size or local failure. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Is low serum chloride level a risk factor for cardiovascular mortality?",
+      "ref_verdict": "yes",
+      "gen_verdict": "yes",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "yes Serum chloride level is a simple, independent and graded predictor of total, CVD and non-CVD mortalities in the general population. It may be useful in clinical practice and research. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Locoregional opening of the rodent blood-brain barrier for paclitaxel using Nd:YAG laser-induced thermo therapy: a new concept of adjuvant glioma therapy?",
+      "ref_verdict": "yes",
+      "gen_verdict": "yes",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "yes LITT is a promising tool for the disruption of the BBB. LITT-induced locoregional opening of the BBB might be a new concept for adjuvant glioma therapy. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Is oncoplastic surgery a contraindication for accelerated partial breast radiation using the interstitial multicatheter brachytherapy method?",
+      "ref_verdict": "maybe",
+      "gen_verdict": "no",
+      "correct": false,
+      "disclaimer": true,
+      "generation": "no APBI can be safely performed after oncoplastic surgery using the interstitial multicatheter brachytherapy technique with acceptable acute and late toxicity rates. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Does the type of tibial component affect mechanical alignment in unicompartmental knee replacement?",
+      "ref_verdict": "yes",
+      "gen_verdict": "yes",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "yes The type of tibial component used in UKR has a significant effect on the magnitude of postoperative mechanical alignment. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Is size-reducing ascending aortoplasty with external reinforcement an option in modern aortic surgery?",
+      "ref_verdict": "yes",
+      "gen_verdict": "yes",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "yes Size-reducing ascending aortoplasty with external reinforcement is a safe and effective procedure for the treatment of aneurysm or ectasia of the ascending aorta. Indications should be defined according to the diameter of the dilatation, the history of dilatation, and the intraoperative management. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Does music influence stress in mechanically ventilated patients?",
+      "ref_verdict": "no",
+      "gen_verdict": "no",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "no In this population, music did not appear to influence stress as measured by UFC. Additional biomarkers of stress and patient-centred outcomes research are needed to further explore the potential benefits and risks of music interventions in the ICU. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Can tailored interventions increase mammography use among HMO women?",
+      "ref_verdict": "yes",
+      "gen_verdict": "yes",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "yes Tailored telephone counseling is more effective than tailored print materials for promoting mammography screening. However, telephone counseling is more costly and time-consuming than print materials. Therefore, print materials may be the method of choice for health plans wanting to promote mammography screening. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Can EMS Providers Provide Appropriate Tidal Volumes in a Simulated Adult-sized Patient with a Pediatric-sized Bag-Valve-Mask?",
+      "ref_verdict": "yes",
+      "gen_verdict": "yes",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "yes EMS providers can safely deliver tidal volumes similar to those recommended in lung-protective ventilation protocols when using a pediatric-sized BVM. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Do resident's leadership skills relate to ratings of technical skill?",
+      "ref_verdict": "yes",
+      "gen_verdict": "yes",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "yes Residents who rated lower levels of skills decay and task difficulty used their assistant more during the bowel repair task. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Are reports of mechanical dysfunction in chronic oro-facial pain related to somatisation?",
+      "ref_verdict": "yes",
+      "gen_verdict": "no",
+      "correct": false,
+      "disclaimer": true,
+      "generation": "no Self-reported mechanical factors are associated with chronic oro-facial pain. However, this relationship could be explained by the common co-occurrence of other frequently unexplained syndromes. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Does the use of atypical antipsychotics as adjunctive therapy in depression result in cost savings?",
+      "ref_verdict": "no",
+      "gen_verdict": "yes",
+      "correct": false,
+      "disclaimer": true,
+      "generation": "yes AAPs result in higher costs than other second-line treatments. However, the higher costs of AAPs may be offset by their effect on hospitalizations. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Can ki-67 play a role in prediction of breast cancer patients' response to neoadjuvant chemotherapy?",
+      "ref_verdict": "yes",
+      "gen_verdict": "no",
+      "correct": false,
+      "disclaimer": true,
+      "generation": "no Ki-67 cannot be used to predict response to neoadjuvant chemotherapy in our patients. However, it can be used to differentiate luminal from nonluminal tumors. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Does screening or surveillance for primary hepatocellular carcinoma with ultrasonography improve the prognosis of patients?",
+      "ref_verdict": "yes",
+      "gen_verdict": "yes",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "yes Ultrasonographic screening for primary hepatocellular carcinoma improves the prognosis of patients. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Are high flow nasal cannulae noisier than bubble CPAP for preterm infants?",
+      "ref_verdict": "no",
+      "gen_verdict": "no",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "no HFNC were no noisier than BCPAP when measured at the EAM. HFNC may be a quieter alternative to BCPAP for treating preterm infants. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Scrotal approach to both palpable and impalpable undescended testes: should it become our first choice?",
+      "ref_verdict": "yes",
+      "gen_verdict": "yes",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "yes Our results show that a single scrotal incision approach is a safe and effective method for treatment of both palpable and impalpable undescended testes. It should therefore become the first choice of approach in the treatment of undescended testes. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Should lower limb fractures be treated surgically in patients with chronic spinal injuries?",
+      "ref_verdict": "yes",
+      "gen_verdict": "yes",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "yes In our series, surgical treatment of lower limb fractures in patients with chronic spinal cord injuries provides better results than conservative treatment. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Did Chile's traffic law reform push police enforcement?",
+      "ref_verdict": "yes",
+      "gen_verdict": "yes",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "yes The results support the hypothesis that the reduction of traffic fatalities and injuries during 2000-2012 was related to the increase in police traffic enforcement registered after the introduction of Chile's 2005 traffic law reform. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Is a specialised training of phonological awareness indicated in every preschool child?",
+      "ref_verdict": "maybe",
+      "gen_verdict": "yes",
+      "correct": false,
+      "disclaimer": true,
+      "generation": "yes In children with risk factors for dyslexia a specialized training of phonological awareness should be offered. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Is CA72-4 a useful biomarker in differential diagnosis between ovarian endometrioma and epithelial ovarian cancer?",
+      "ref_verdict": "yes",
+      "gen_verdict": "yes",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "yes CA72-4 is a useful marker in the differential diagnosis between ovarian endometrioma and epithelial ovarian cancer. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Is there a first night effect on sleep bruxism?",
+      "ref_verdict": "no",
+      "gen_verdict": "yes",
+      "correct": false,
+      "disclaimer": true,
+      "generation": "yes The first night effect seems to be present only for RMMA amplitude variables, without changes in SB event frequency. This finding suggests that SB events are not influenced by the first night effect, whereas the modulating factors of SB may be influenced by it. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Maternal creatine homeostasis is altered during gestation in the spiny mouse: is this a metabolic adaptation to pregnancy?",
+      "ref_verdict": "yes",
+      "gen_verdict": "yes",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "yes Pregnancy is associated with altered creatine homeostasis in the spiny mouse, with decreased renal creatine excretion and increased creatine content of maternal tissues. These changes may reflect a metabolic adaptation to pregnancy to ensure adequate creatine is available for the maternal tissues, placenta and fetus. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Cardiovascular risk in a rural adult West African population: is resting heart rate also relevant?",
+      "ref_verdict": "yes",
+      "gen_verdict": "yes",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "yes In this rural African population, elevated RHR was common and was significantly associated with other CVD risk factors. RHR may be a useful and simple addition to the armamentarium of CVD risk assessment tools in such populations. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Does cup-cage reconstruction with oversized cups provide initial stability in THA for osteoporotic acetabular fractures?",
+      "ref_verdict": "yes",
+      "gen_verdict": "yes",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "yes Cup-cage reconstruction with an oversized acetabular component provides initial stability in osteoporotic acetabular fractures. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Does the Child Health Computing System adequately identify children with cerebral palsy?",
+      "ref_verdict": "no",
+      "gen_verdict": "no",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "no The CHCS does not adequately identify children with cerebral palsy. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Chemoradiotherapy in the management of locally advanced squamous cell carcinoma esophagus: is surgical resection required?",
+      "ref_verdict": "no",
+      "gen_verdict": "no",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "no The addition of surgery to chemoradiotherapy in patients with resectable tumor after chemoradiotherapy does not improve the survival. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Is alexithymia a risk factor for unexplained physical symptoms in general medical outpatients?",
+      "ref_verdict": "no",
+      "gen_verdict": "no",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "no In patients with unexplained physical symptoms, alexithymia does not seem to be a risk factor. However, in patients with unexplained symptoms and a mental disorder, alexithymia may be a risk factor if emotional problems are denied. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Are WHO/UNAIDS/UNICEF-recommended replacement milks for infants of HIV-infected mothers appropriate in the South African context?",
+      "ref_verdict": "no",
+      "gen_verdict": "no",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "no Recommended replacement milks for infants of HIV-infected mothers are nutritionally inadequate and expensive in the South African context. Formula feeding should be prioritised for these infants. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Does the distribution of health care benefits in Kenya meet the principles of universal coverage?",
+      "ref_verdict": "no",
+      "gen_verdict": "yes",
+      "correct": false,
+      "disclaimer": true,
+      "generation": "yes The distribution of health care benefits in Kenya is pro-rich. The public sector is equitable, while the private-not-for-profit and private-for-profit sectors are pro-rich. The distribution of benefits at the hospital level favours the rich, while primary health care services are pro-poor. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Risk factors for major depression during midlife among a community sample of women with and without prior major depression: are they the same or different?",
+      "ref_verdict": "no",
+      "gen_verdict": "yes",
+      "correct": false,
+      "disclaimer": true,
+      "generation": "yes These results suggest that risk factors for first lifetime-onset and recurrent MDD during midlife differ. Screening for MDD in midlife should include a broad range of psychosocial and health conditions. Interventions that target midlife transitions, e.g. menopause and anxiety, may prevent MDD. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Multidisciplinary decisions in breast cancer: does the patient receive what the team has recommended?",
+      "ref_verdict": "yes",
+      "gen_verdict": "yes",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "yes Most patients in our unit receive what the breast team recommates at MDT. However, there is room for improvement, particularly in ensuring that all patients are discussed at MDT and that the MDT documentation is complete. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Do overweight children necessarily make overweight adults?",
+      "ref_verdict": "no",
+      "gen_verdict": "no",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "no The trend in body mass index in children and adolescents in Japan is changing. More recent cohorts are more overweight as children but thinner as young women. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Can the condition of the cell microenvironment of mediastinal lymph nodes help predict the risk of metastases in non-small cell lung cancer?",
+      "ref_verdict": "yes",
+      "gen_verdict": "yes",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "yes The condition of the cell microenvironment of regional LNs is an important factor in the process of metastases. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Proof of concept study: does fenofibrate have a role in sleep apnoea syndrome?",
+      "ref_verdict": "yes",
+      "gen_verdict": "yes",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "yes Fenofibrate reduced the percentage of time with SpO(2)<90% and non-cortical micro-awakenings per hour, and may have a role in the treatment of sleep apnoea syndrome. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Follow-up of patients with new cardiovascular implantable electronic devices: are experts' recommendations implemented in routine clinical practice?",
+      "ref_verdict": "yes",
+      "gen_verdict": "no",
+      "correct": false,
+      "disclaimer": true,
+      "generation": "no Only about half of Medicare beneficiaries with new CIEDs received follow-up within 2 to 12 weeks as recommended. Racial disparities and improvements over time were identified. Strategies to improve adherence to experts' recommendations are needed. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Chronic progressive cervical myelopathy with HTLV-I infection: Variant form of HAM/TSP?",
+      "ref_verdict": "yes",
+      "gen_verdict": "yes",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "yes These patients may represent a variant form of HAM/TSP with predominant spinal cord lesions. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Two-year follow-up survey of patients with allergic contact dermatitis from an occupational cohort: is the prognosis dependent on the omnipresence of the allergen?",
+      "ref_verdict": "yes",
+      "gen_verdict": "yes",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "yes The prognosis for occupational contact dermatitis seems to be dependent on the omnipresence of the allergen. Early change of job seems to be important for a good prognosis. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Are lower fasting plasma glucose levels at diagnosis of type 2 diabetes associated with improved outcomes?",
+      "ref_verdict": "yes",
+      "gen_verdict": "yes",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "yes Lower FPG at diagnosis is associated with reduced risk for macrovascular and microvascular complications and surrogate outcomes. This supports the case for earlier detection of type 2 diabetes. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Eyelid-parotid metastasis: do we screen for coexisting masses?",
+      "ref_verdict": "yes",
+      "gen_verdict": "yes",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "yes We report three cases of metastatic tumours involving the eyelid and parotid gland. It is important to screen for coexisting masses in patients with a known malignancy. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Is halofantrine ototoxic?",
+      "ref_verdict": "yes",
+      "gen_verdict": "yes",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "yes Halofantrine is ototoxic at therapeutic and double therapeutic doses. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Is routine chest radiography after transbronchial biopsy necessary?",
+      "ref_verdict": "no",
+      "gen_verdict": "no",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "no Routine CXR after bronchoscopy and TBB should not be performed in asymptomatic patients. Symptoms suggestive of pneumothorax should be the indication for CXR. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "MR Diagnosis of Bone Metastases at 1.5 T and 3 T: Can STIR Imaging Be Omitted?",
+      "ref_verdict": "yes",
+      "gen_verdict": "yes",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "yes T1w imaging at both field strengths provides better lesion conspicuity and delineation than STIR and should therefore be included in standard protocols for the detection of bone metastases. Omission of STIR sequences at 1.5 T and 3 T can be considered. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Prescriptions as a proxy for asthma in children: a good choice?",
+      "ref_verdict": "no",
+      "gen_verdict": "no",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "no Using prescription data alone to identify children with asthma may lead to overestimation of asthma in young children. In addition, the method proposed by Stock et al. does not allow for a reliable distinction between asthma and other chronic inflammatory diseases of the airways in children. Therefore, prescription data should not be used as a proxy for asthma in epidemiological studies. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Can D-dimer become a new diagnostic parameter for acute appendicitis?",
+      "ref_verdict": "no",
+      "gen_verdict": "no",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "no D-dimer levels cannot be used as a diagnostic parameter for AA. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Is the processing of affective prosody influenced by spatial attention?",
+      "ref_verdict": "maybe",
+      "gen_verdict": "yes",
+      "correct": false,
+      "disclaimer": true,
+      "generation": "yes The results show that the processing of emotional prosody is influenced by spatial attention. However, the influence of spatial attention on the processing of emotional prosody seems to be limited. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Does increased patient awareness improve accrual into cancer-related clinical trials?",
+      "ref_verdict": "no",
+      "gen_verdict": "yes",
+      "correct": false,
+      "disclaimer": true,
+      "generation": "yes Patient satisfaction with information regarding clinical trials can be improved by targeted educational interventions. However, this may not be sufficient to increase accruals to clinical trials. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Delays in time to primary treatment after a diagnosis of breast cancer: does it impact survival?",
+      "ref_verdict": "no",
+      "gen_verdict": "no",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "no Delayed TPT did not affect survival in our cohort. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Does case-mix based reimbursement stimulate the development of process-oriented care delivery?",
+      "ref_verdict": "yes",
+      "gen_verdict": "yes",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "yes Case-mix based reimbursement stimulates hospitals to establish care programmes, but it does not yet lead to a change in focus from function to process. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "In vivo visualization of pyloric mucosal hypertrophy in infants with hypertrophic pyloric stenosis: is there an etiologic role?",
+      "ref_verdict": "yes",
+      "gen_verdict": "yes",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "yes We have shown that the pyloric mucosa is redundant in infants with IHPS. This finding may be related to the development of IHPS. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Does growth hormone replacement therapy reduce mortality in adults with growth hormone deficiency?",
+      "ref_verdict": "no",
+      "gen_verdict": "yes",
+      "correct": false,
+      "disclaimer": true,
+      "generation": "yes GH treatment reduces all-cause and CVD mortality in women with GHD. High-risk patients, especially women, should be identified to optimize treatment strategies. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Autoxidation products of both carbohydrates and lipids are increased in uremic plasma: is there oxidative stress in uremia?",
+      "ref_verdict": "yes",
+      "gen_verdict": "yes",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "yes These data indicate that both carbohydrate and lipid autoxidation are increased in uremia, but that their products accumulate independently in vivo. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Hepatic arterial embolization for unresectable hepatocellular carcinomas: do technical factors affect prognosis?",
+      "ref_verdict": "yes",
+      "gen_verdict": "yes",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "yes Selective embolization was identified as a significant prognostic factor for overall survival. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Are patients with Werlhof's disease at increased risk for bleeding complications when undergoing cardiac surgery?",
+      "ref_verdict": "no",
+      "gen_verdict": "no",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "no Patients with WD are not at increased risk for bleeding complications when undergoing cardiac surgery employing extracorporeal circulation if their platelet counts are above 80/nl. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Menopausal hormone therapy and irregular endometrial bleeding: a potential role for uterine natural killer cells?",
+      "ref_verdict": "yes",
+      "gen_verdict": "yes",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "yes Endometrial uNK cells are increased in bleeding subjects on HT. This may represent a potential mechanism for irregular bleeding in HT users. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Is the atopy patch test with house dust mites specific for atopic dermatitis?",
+      "ref_verdict": "yes",
+      "gen_verdict": "yes",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "yes The APT with HDM is positive in a relevant percentage of AD patients, but it is also frequently positive in AWE and NA subjects. The APT with HDM is not specific for AD. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Is the 7th TNM edition suitable for biological predictor in early gastric cancer?",
+      "ref_verdict": "yes",
+      "gen_verdict": "yes",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "yes The seventh TNM staging is more suitable for biological predictor in EGC than the previous node staging. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Aromatase inhibitor-related musculoskeletal symptoms: is preventing osteoporosis the key to eliminating these symptoms?",
+      "ref_verdict": "yes",
+      "gen_verdict": "yes",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "yes Our study suggests that preventing osteoporosis with Ca/Bis may reduce the incidence of musculoskeletal symptoms and bone fractures in patients receiving AIs. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Should serum pancreatic lipase replace serum amylase as a biomarker of acute pancreatitis?",
+      "ref_verdict": "yes",
+      "gen_verdict": "yes",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "yes Serum pancreatic lipase has improved diagnostic accuracy compared with serum amylase for the diagnosis of acute pancreatitis. It should replace serum amylase as the first-line test. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Canada's Compassionate Care Benefit: is it an adequate public health response to addressing the issue of caregiver burden in end-of-life care?",
+      "ref_verdict": "no",
+      "gen_verdict": "yes",
+      "correct": false,
+      "disclaimer": true,
+      "generation": "yes The PHP model proved to be a useful framework for analyzing the informal caregiver experience, and for identifying how the CCB could be improved to better address the determinants of health. However, the CCB is only one piece of a much larger puzzle. The PHP model, and the determinants of health it encompasses, must be further developed and operationalized if we are to adequately respond to the needs of informal caregivers. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Is primary angioplasty an acceptable alternative to thrombolysis?",
+      "ref_verdict": "yes",
+      "gen_verdict": "yes",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "yes Patient and carer satisfaction with primary angioplasty-based care was high, despite the added inconvenience of visiting intervention sites. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Is robotically assisted laparoscopic radical prostatectomy less invasive than retropubic radical prostatectomy?",
+      "ref_verdict": "yes",
+      "gen_verdict": "yes",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "yes RALP is associated with less systemic inflammatory response syndrome than RRP. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Do antibiotics decrease post-tonsillectomy morbidity?",
+      "ref_verdict": "no",
+      "gen_verdict": "no",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "no The routine use of antibiotics in tonsillectomy does not seem justified. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Can surgeon familiarization with current evidence lead to a change in practice?",
+      "ref_verdict": "no",
+      "gen_verdict": "no",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "no A simple intervention such as mailing out a summary of current evidence does not appear to be effective in changing practice. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Measurement of head and neck paragangliomas: is volumetric analysis worth the effort?",
+      "ref_verdict": "yes",
+      "gen_verdict": "no",
+      "correct": false,
+      "disclaimer": true,
+      "generation": "no The linear dimension method is the most reproducible method for measuring head and neck paragangliomas. However, manual area tracing is the method of choice for irregularly shaped tumours. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Are stroke patients' reports of home blood pressure readings reliable?",
+      "ref_verdict": "yes",
+      "gen_verdict": "yes",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "yes Stroke patients are reliable in recording their home BP readings. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Does septoplasty change the dimensions of compensatory hypertrophy of the middle turbinate?",
+      "ref_verdict": "no",
+      "gen_verdict": "no",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "no Septoplasty does not change the dimensions of compensatory hypertrophy of the middle turbinate. Compensatory hypertrophy of the middle turbinate on the deviated side is secondary to the angle of the septum. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Advanced epithelial ovarian carcinoma in Thai women: should we continue to offer second-look laparotomy?",
+      "ref_verdict": "no",
+      "gen_verdict": "yes",
+      "correct": false,
+      "disclaimer": true,
+      "generation": "yes The results suggest that patients with advanced EOC who have no evidence of disease after primary surgery and chemotherapy should be offered SLL. However, the procedure should be performed only in specialized centers with experienced surgeons. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Is pelvic pain associated with defecatory symptoms in women with pelvic organ prolapse?",
+      "ref_verdict": "yes",
+      "gen_verdict": "yes",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "yes Defecatory symptoms are common in women with pelvic organ prolapse and pelvic pain. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Body dysmorphic disorder: does it have a psychotic subtype?",
+      "ref_verdict": "yes",
+      "gen_verdict": "no",
+      "correct": false,
+      "disclaimer": true,
+      "generation": "no Although BDD can present with psychotic features, the disorder as a whole does not appear to be a psychotic disorder. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Vertical lines in distal esophageal mucosa (VLEM): a true endoscopic manifestation of esophagitis in children?",
+      "ref_verdict": "yes",
+      "gen_verdict": "yes",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "yes VLEM are a common endoscopic finding in children with eosinophilic esophagitis. They are a specific and sensitive sign of moderate to severe eosinophilic esophagitis. VLEM are a true endoscopic manifestation of esophagitis in children. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Do African American women require fewer calories to maintain weight?",
+      "ref_verdict": "no",
+      "gen_verdict": "no",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "no AA women do not require fewer calories than non-AA women to maintain weight. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Is it possible to stop treatment with nucleos(t)ide analogs in patients with e-antigen negative chronic hepatitis B?",
+      "ref_verdict": "maybe",
+      "gen_verdict": "no",
+      "correct": false,
+      "disclaimer": true,
+      "generation": "no Virological relapse is frequent in patients with HBeAg-negative CHB who discontinue NA therapy. The optimal strategy for selecting patients for treatment discontinuation needs to be defined. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Can patient coaching reduce racial/ethnic disparities in cancer pain control?",
+      "ref_verdict": "yes",
+      "gen_verdict": "yes",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "yes Patient coaching can reduce racial/ethnic disparities in pain control. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Do risk calculators accurately predict surgical site\u00a0occurrences?",
+      "ref_verdict": "no",
+      "gen_verdict": "no",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "no Existing models have low predictive accuracy for SSO and SSI after VHR. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Does patella position influence ligament balancing in total knee arthroplasty?",
+      "ref_verdict": "yes",
+      "gen_verdict": "yes",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "yes The in vivo gap measurements in three different patella positions demonstrated that patella eversion decreases the lateral gap in knee flexion position. This technique may be useful for balancing difficult lateral compartment in TKA. However, the variability of the technique was notable. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Do patterns of knowledge and attitudes exist among unvaccinated seniors?",
+      "ref_verdict": "yes",
+      "gen_verdict": "yes",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "yes Clusters of knowledge and attitudes exist among unvaccinated seniors. Targeted education may increase influenza vaccine uptake. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Does responsibility affect the public's valuation of health care interventions?",
+      "ref_verdict": "maybe",
+      "gen_verdict": "yes",
+      "correct": false,
+      "disclaimer": true,
+      "generation": "yes The public place a higher value on safety improvements when the health care system is responsible for the harm than when the harm arises from individual choices or natural causes. This may help to explain why health services invest more in safety improvements where the causal responsibility is unclear. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Comparative safety of infliximab and etanercept on the risk of serious infections: does the association vary by patient characteristics?",
+      "ref_verdict": "yes",
+      "gen_verdict": "yes",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "yes In this comparative effectiveness study, the increased risk of serious infections associated with infliximab compared with etanercept was limited to patients<65 years. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Is external palliative radiotherapy for gallbladder carcinoma effective?",
+      "ref_verdict": "yes",
+      "gen_verdict": "yes",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "yes External palliative radiotherapy may be considered in patients with unresectable gallbladder carcinoma. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Esophagogastric devascularization without splenectomy in portal hypertension: safe and effective?",
+      "ref_verdict": "yes",
+      "gen_verdict": "yes",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "yes EDWS is a safe and effective procedure for the treatment of esophagogastric variceal hemorrhage. The lower morbidity rate of portal venous system thrombosis may be the main reason for the comparable recurrence rate between the two groups. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Is intraoperative neuromonitoring associated with better functional outcome in patients undergoing open TME?",
+      "ref_verdict": "yes",
+      "gen_verdict": "yes",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "yes Intraoperative neuromonitoring of innervation to the bladder and the internal anal sphincter seems to improve urogenital and anorectal function after open TME for rectal cancer. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Three-dimensional ultrasound-validated large-core needle biopsy: is it a reliable method for the histological assessment of breast lesions?",
+      "ref_verdict": "yes",
+      "gen_verdict": "yes",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "yes 3D ultrasound-validated LCNB of the breast is a reliable method for the histological assessment of breast lesions. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Does preloading with colloids prevent hemodynamic changes when neurosurgical patients are subsequently changed to the seated position?",
+      "ref_verdict": "yes",
+      "gen_verdict": "yes",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "yes Preloading with colloids before positioning in the sitting position can prevent hemodynamic changes. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Are pediatric concussion patients compliant with discharge instructions?",
+      "ref_verdict": "yes",
+      "gen_verdict": "no",
+      "correct": false,
+      "disclaimer": true,
+      "generation": "no Most patients do not comply with recommended concussion management. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Is the h-index predictive of greater NIH funding success among academic radiologists?",
+      "ref_verdict": "yes",
+      "gen_verdict": "yes",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "yes The h-index is significantly higher among academic radiologists who have received NIH funding compared to those who have not. However, the h-index is not predictive of NIH funding success. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Is transurethral catheterisation the ideal method of bladder drainage?",
+      "ref_verdict": "no",
+      "gen_verdict": "no",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "no Transurethral catheterisation is associated with significant discomfort and a high incidence of urinary tract infection. Alternative methods of bladder drainage should be explored. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Immune suppression by lysosomotropic amines and cyclosporine on T-cell responses to minor and major histocompatibility antigens: does synergy exist?",
+      "ref_verdict": "yes",
+      "gen_verdict": "yes",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "yes Lysosomotropic amines can suppress T-cell responses to MiHC and MHC in vitro and can synergize with cyclosporine in the suppression of these responses. The mechanism of action of lysosomotropic amines may be different from that of cyclosporine. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Does shaving the incision site increase the infection rate after spinal surgery?",
+      "ref_verdict": "maybe",
+      "gen_verdict": "yes",
+      "correct": false,
+      "disclaimer": true,
+      "generation": "yes Shaving the incision site before spinal surgery increases the postsurgical infection rate. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Is distance to provider a barrier to care for medicaid patients with breast, colorectal, or lung cancer?",
+      "ref_verdict": "no",
+      "gen_verdict": "yes",
+      "correct": false,
+      "disclaimer": true,
+      "generation": "yes Travel burden is associated with later stage at diagnosis and longer time-to-treatment for Medicaid patients with breast cancer and CRC. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "It's Fournier's gangrene still dangerous?",
+      "ref_verdict": "yes",
+      "gen_verdict": "yes",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "yes Fournier's gangrene is still a serious disease with a high mortality rate. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Is the cell death in mesial temporal sclerosis apoptotic?",
+      "ref_verdict": "maybe",
+      "gen_verdict": "no",
+      "correct": false,
+      "disclaimer": true,
+      "generation": "no Our results suggest that neurons in MTS do not die by apoptosis. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Are performance measurement systems useful?",
+      "ref_verdict": "yes",
+      "gen_verdict": "yes",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "yes The strategic use of PMS in health care organizations directly enhances performance in terms of improved processes. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Can the growth rate of a gallbladder polyp predict a neoplastic polyp?",
+      "ref_verdict": "no",
+      "gen_verdict": "no",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "no The growth rate of a GB polyp is not a useful predictor of its neoplastic nature. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Delayed peripheral facial palsy in the stapes surgery: can it be prevented?",
+      "ref_verdict": "yes",
+      "gen_verdict": "yes",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "yes Poststapedectomy delayed facial palsy may be caused by a reactivation of latent HSV-1 infection. A history of recurrent herpetic labialis should be considered a risk factor for stapes surgery. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Does the severity of obstructive sleep apnea predict patients requiring high continuous positive airway pressure?",
+      "ref_verdict": "maybe",
+      "gen_verdict": "yes",
+      "correct": false,
+      "disclaimer": true,
+      "generation": "yes Severe OSA is the main predictor of the need for high CPAP. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Predicting admission at triage: are nurses better than a simple objective score?",
+      "ref_verdict": "yes",
+      "gen_verdict": "yes",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "yes GAPS is a useful adjunct to triage nurses, but only when they are not over-confident. [Based on published research. Consult healthcare provider.]"
+    },
+    {
+      "instruction": "Do microbiological factors account for poor pregnancy outcome among unmarried pregnant women in Poland?",
+      "ref_verdict": "yes",
+      "gen_verdict": "yes",
+      "correct": true,
+      "disclaimer": true,
+      "generation": "yes The results suggest that unmarried pregnant women are characterized by a higher risk of BV and M. hominis colonization, as compared to married women. The young age of the subject and a low concentration of Lactobacillus spp. seem to be independent risk factors for M. hominis colonization. [Based on published research. Consult healthcare provider.]"
+    }
+  ]
+}

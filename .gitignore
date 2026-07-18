@@ -1,0 +1,8 @@
+# Large model weights and training outputs — regenerable, not tracked
+models/
+outputs/
+*.safetensors
+*.bin
+__pycache__/
+*.pyc
+.DS_Store

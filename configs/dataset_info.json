@@ -1,0 +1,21 @@
+{
+  "medical_dpo": {
+    "file_name": "../data/medical_dpo.json",
+    "ranking": true,
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "chosen": "chosen",
+      "rejected": "rejected"
+    }
+  },
+  "medical_train": {
+    "file_name": "../../medical-llm/data/processed/medical_train.json",
+    "formatting": "alpaca",
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output"
+    }
+  }
+}

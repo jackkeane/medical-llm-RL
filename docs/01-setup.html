@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chapter 1 · The shared starting line — Alignment, visualized</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="wrap">
+
+<header class="site-head">
+  <a class="brand" href="index.html">Alignment, visualized <span>· BioMistral-7B · DPO vs GRPO</span></a>
+  <nav class="site-nav">
+    <a href="index.html">Overview</a>
+    <a href="01-setup.html" aria-current="page">1 · Setup</a>
+    <a href="02-dpo.html">2 · DPO</a>
+    <a href="03-grpo.html">3 · GRPO</a>
+    <a href="04-comparison.html">4 · Comparison</a>
+    <button class="theme-toggle" type="button" aria-label="Switch to dark mode">Dark mode</button>
+  </nav>
+</header>
+
+<p class="kicker">Chapter 1</p>
+<h1>The shared starting line</h1>
+<p class="lede">To compare two alignment methods <em>fairly</em>, they must start from exactly the same
+model. This chapter builds that shared starting point — a merged SFT model — and lays out the one
+real difference the rest of the walkthrough is about: <strong>what kind of signal each method
+learns from</strong>.</p>
+
+<h2>Step one: freeze the SFT model into a single starting point</h2>
+<p>The finetuning project left us a <strong>LoRA adapter</strong> — a small file of trained weights
+that rides on top of the frozen base model. For alignment we first <em>merge</em> that adapter into
+the base, producing one standalone model, <code>sft-merged</code>. It plays two roles at once:</p>
+
+<div class="card" style="overflow-x:auto; padding:18px 10px;">
+  <svg viewBox="0 0 660 168" width="660" height="168" role="img" style="min-width:560px; display:block; margin:0 auto;"
+       aria-label="Diagram: base model plus SFT adapter merge into one sft-merged model, which becomes the start for a fresh DPO adapter and a fresh GRPO adapter">
+    <defs>
+      <marker id="arr2" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+        <path d="M0,0 L8,4 L0,8 Z" fill="var(--baseline)"/>
+      </marker>
+    </defs>
+    <g font-family="system-ui,sans-serif">
+      <rect x="6" y="20" width="150" height="40" rx="9" fill="var(--surface)" stroke="var(--baseline)" stroke-width="1.1"/>
+      <text x="81" y="38" text-anchor="middle" font-size="12.5" font-weight="640" fill="var(--text-primary)">Base model ❄</text>
+      <text x="81" y="52" text-anchor="middle" font-size="10.5" fill="var(--text-muted)">BioMistral-7B</text>
+      <rect x="6" y="72" width="150" height="40" rx="9" fill="var(--accent-wash)" stroke="var(--series-1)" stroke-width="1.1"/>
+      <text x="81" y="90" text-anchor="middle" font-size="12.5" font-weight="640" fill="var(--text-primary)">SFT adapter</text>
+      <text x="81" y="104" text-anchor="middle" font-size="10.5" fill="var(--text-secondary)">from project 1</text>
+      <line x1="158" y1="45" x2="196" y2="62" stroke="var(--baseline)" stroke-width="1.4" marker-end="url(#arr2)"/>
+      <line x1="158" y1="90" x2="196" y2="72" stroke="var(--baseline)" stroke-width="1.4" marker-end="url(#arr2)"/>
+      <text x="150" y="140" text-anchor="middle" font-size="11" fill="var(--text-muted)">merge →</text>
+
+      <rect x="200" y="46" width="150" height="44" rx="9" fill="var(--surface)" stroke="var(--baseline)" stroke-width="1.3"/>
+      <text x="275" y="65" text-anchor="middle" font-size="13" font-weight="650" fill="var(--text-primary)">sft-merged</text>
+      <text x="275" y="80" text-anchor="middle" font-size="10.5" fill="var(--text-muted)">one standalone model</text>
+
+      <line x1="352" y1="60" x2="392" y2="40" stroke="var(--baseline)" stroke-width="1.4" marker-end="url(#arr2)"/>
+      <line x1="352" y1="76" x2="392" y2="118" stroke="var(--baseline)" stroke-width="1.4" marker-end="url(#arr2)"/>
+
+      <rect x="396" y="18" width="258" height="44" rx="9" fill="var(--accent-wash)" stroke="var(--series-1)" stroke-width="1.1"/>
+      <text x="525" y="37" text-anchor="middle" font-size="12.5" font-weight="640" fill="var(--text-primary)">fresh DPO adapter (rank 16)</text>
+      <text x="525" y="52" text-anchor="middle" font-size="10.5" fill="var(--text-secondary)">trained in Chapter 2</text>
+      <rect x="396" y="98" width="258" height="44" rx="9" fill="var(--accent-wash)" stroke="var(--series-1)" stroke-width="1.1"/>
+      <text x="525" y="117" text-anchor="middle" font-size="12.5" font-weight="640" fill="var(--text-primary)">fresh GRPO adapter (rank 16)</text>
+      <text x="525" y="132" text-anchor="middle" font-size="10.5" fill="var(--text-secondary)">trained in Chapter 3</text>
+    </g>
+  </svg>
+</div>
+
+<ol>
+  <li><strong>The identical start.</strong> Both DPO and GRPO train a brand-new rank-16 adapter on
+  top of <code>sft-merged</code>. Same weights, same rank, same GPU — the only variable left is the
+  learning signal.</li>
+  <li><strong>DPO's reference model.</strong> DPO works by comparing the model it is training against
+  a frozen <em>reference</em>. Because the fresh adapter starts at zero, "the model with its adapter
+  switched off" is exactly <code>sft-merged</code> — so the reference is genuinely the SFT model,
+  which is what makes the preference math correct.</li>
+</ol>
+
+<h2>The one real difference: the shape of the signal</h2>
+<p>SFT learns by imitation — "here is the correct answer, raise its probability." Alignment methods
+learn from something weaker but cheaper to get: a <em>judgement</em> about answers. DPO and GRPO
+take two different forms of judgement.</p>
+
+<div class="fig">
+  <p class="fig-title">Two ways to tell a model it did well</p>
+  <table class="data" style="margin-top:4px">
+    <tr><th style="text-align:left">&nbsp;</th><th style="text-align:left">DPO</th><th style="text-align:left">GRPO</th></tr>
+    <tr><td>What you give it</td><td style="text-align:left">pairs of answers: one <em>chosen</em>, one <em>rejected</em></td><td style="text-align:left">a <em>reward function</em> that scores any answer</td></tr>
+    <tr><td>Where answers come from</td><td style="text-align:left">a fixed dataset, made ahead of time</td><td style="text-align:left">the model generates its own, live, during training</td></tr>
+    <tr><td>What it optimizes</td><td style="text-align:left">make chosen more likely than rejected</td><td style="text-align:left">make high-reward answers more likely</td></tr>
+    <tr><td>Needs a reward model?</td><td style="text-align:left">no — the preference <em>is</em> the signal</td><td style="text-align:left">no — a rule computes the reward here</td></tr>
+    <tr><td>This project's signal</td><td style="text-align:left">curated answer ≻ raw base answer</td><td style="text-align:left">+1 if the yes/no/maybe verdict is correct</td></tr>
+  </table>
+</div>
+
+<div class="callout">
+<strong>Keep this distinction in hand.</strong> DPO is <em>offline</em> — it never runs the model
+during training, it just adjusts probabilities between two answers it was handed. GRPO is
+<em>online</em> — it generates answers and reacts to how good they are. That single difference
+explains almost everything in Chapter 4.</div>
+
+<h2>Why align between SFT and compression?</h2>
+<p>Order matters. Alignment nudges the model's <em>behavior</em>; compression shrinks its
+<em>weights</em>. If you compressed first and aligned second, you'd be aligning a model you're about
+to change again. Aligning first means the pruning and quantization in the
+<a href="https://github.com/jackkeane/medical-llm-pdq">next project</a> preserve behavior that's
+already settled.</p>
+
+<div class="pager">
+  <a href="index.html"><span class="dir">← Overview</span> Aligning a finetuned model</a>
+  <a class="next" href="02-dpo.html"><span class="dir">Next →</span> Chapter 2 · DPO</a>
+</div>
+
+<script src="assets/charts.js"></script>
+</div>
+</body>
+</html>

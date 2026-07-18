@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aligning a finetuned model — DPO vs GRPO, visualized</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="wrap">
+
+<header class="site-head">
+  <a class="brand" href="index.html">Alignment, visualized <span>· BioMistral-7B · DPO vs GRPO</span></a>
+  <nav class="site-nav">
+    <a href="index.html" aria-current="page">Overview</a>
+    <a href="01-setup.html">1 · Setup</a>
+    <a href="02-dpo.html">2 · DPO</a>
+    <a href="03-grpo.html">3 · GRPO</a>
+    <a href="04-comparison.html">4 · Comparison</a>
+    <button class="theme-toggle" type="button" aria-label="Switch to dark mode">Dark mode</button>
+  </nav>
+</header>
+
+<h1>After finetuning, how do you <em>align</em> a model?</h1>
+<p class="lede">A companion to the <a href="https://github.com/jackkeane/medical-llm">finetuning walkthrough</a>:
+that project used <strong>SFT</strong> (supervised finetuning) to teach BioMistral-7B the shape of a
+good PubMedQA answer. This one takes that finetuned model and runs the next stage —
+<strong>preference alignment</strong> — two different ways: <strong>DPO</strong> and
+<strong>GRPO</strong>. Then it asks the honest question: <em>did either actually help?</em> Every
+number on these pages is from real runs on a single RTX 4090.</p>
+
+<div class="tiles">
+  <div class="tile">
+    <div class="label">Shared starting point</div>
+    <div class="value">SFT</div>
+    <div class="sub">both methods start here</div>
+  </div>
+  <div class="tile">
+    <div class="label">Method A</div>
+    <div class="value">DPO</div>
+    <div class="sub">learn from a preference</div>
+  </div>
+  <div class="tile">
+    <div class="label">Method B</div>
+    <div class="value">GRPO</div>
+    <div class="sub">optimize a verifiable reward</div>
+  </div>
+  <div class="tile">
+    <div class="label">Verdict accuracy</div>
+    <div class="value">75<small>%</small></div>
+    <div class="sub">SFT, DPO <em>and</em> GRPO — all three</div>
+  </div>
+</div>
+
+<h2>Where alignment sits in the lifecycle</h2>
+<p>An LLM is rarely finetuned once and shipped. There is a pipeline, and alignment is the middle
+stage — you teach the format (SFT), then teach <em>which answers are preferred</em> (RL), then shrink
+the model for deployment (compression). You align <strong>before</strong> compressing, so that pruning
+and quantization preserve the aligned behavior.</p>
+
+<div class="card" style="overflow-x:auto; padding:16px 8px;">
+  <svg viewBox="0 0 1000 96" role="img" style="width:100%; height:auto; min-width:680px; display:block;"
+       aria-label="Lifecycle: supervised finetuning, then this project's alignment stage with two branches DPO and GRPO, then compression">
+    <defs>
+      <marker id="arr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+        <path d="M0,0 L8,4 L0,8 Z" fill="var(--baseline)"/>
+      </marker>
+    </defs>
+    <g font-family="system-ui,sans-serif">
+      <!-- SFT (prior project) -->
+      <rect x="4" y="30" width="184" height="46" rx="9" fill="var(--surface)" stroke="var(--border)" stroke-width="1"/>
+      <text x="96" y="50" text-anchor="middle" font-size="13" font-weight="640" fill="var(--text-primary)">1 · SFT finetuning</text>
+      <text x="96" y="67" text-anchor="middle" font-size="11" fill="var(--text-muted)">prior project · the base model</text>
+      <line x1="190" y1="53" x2="214" y2="53" stroke="var(--baseline)" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- alignment stage: highlighted group with two branches -->
+      <rect x="216" y="6" width="472" height="84" rx="10" fill="var(--accent-wash)" stroke="var(--series-1)" stroke-width="1.2"/>
+      <text x="452" y="22" text-anchor="middle" font-size="11.5" font-weight="650" fill="var(--series-1)">2 · ALIGNMENT — this project</text>
+      <rect x="236" y="30" width="196" height="24" rx="7" fill="var(--surface)" stroke="var(--border)" stroke-width="1"/>
+      <text x="334" y="46" text-anchor="middle" font-size="12" font-weight="600" fill="var(--text-primary)">DPO · learn a preference</text>
+      <rect x="236" y="58" width="196" height="24" rx="7" fill="var(--surface)" stroke="var(--border)" stroke-width="1"/>
+      <text x="334" y="74" text-anchor="middle" font-size="12" font-weight="600" fill="var(--text-primary)">GRPO · verifiable reward</text>
+      <rect x="470" y="42" width="200" height="30" rx="8" fill="var(--surface)" stroke="var(--baseline)" stroke-width="1.1"/>
+      <text x="570" y="61" text-anchor="middle" font-size="12" font-weight="600" fill="var(--text-primary)">compare on held-out test</text>
+      <line x1="436" y1="42" x2="466" y2="53" stroke="var(--baseline)" stroke-width="1.3" marker-end="url(#arr)"/>
+      <line x1="436" y1="70" x2="466" y2="60" stroke="var(--baseline)" stroke-width="1.3" marker-end="url(#arr)"/>
+      <line x1="690" y1="53" x2="714" y2="53" stroke="var(--baseline)" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- compression (next project) -->
+      <rect x="716" y="30" width="280" height="46" rx="9" fill="var(--surface)" stroke="var(--border)" stroke-width="1"/>
+      <text x="856" y="50" text-anchor="middle" font-size="13" font-weight="640" fill="var(--text-primary)">3 · Compression</text>
+      <text x="856" y="67" text-anchor="middle" font-size="11" fill="var(--text-muted)">prune · distill · quantize (next project)</text>
+    </g>
+  </svg>
+</div>
+
+<h2>The result in one picture</h2>
+<p>Here is the headline, and it is a deliberately humbling one. <strong>SFT</strong> takes the base
+model from <em>never producing a verdict at all</em> to 75% correct. Then both alignment methods…
+hold at 75%. The lesson isn't that RL is useless — it's that <strong>RL is not where accuracy comes
+from on a small run like this</strong>, and that the two methods change the model in very different
+ways underneath an identical score. Chapter&nbsp;4 opens that up.</p>
+
+<div class="fig">
+  <p class="fig-title">Verdict accuracy on 100 held-out questions</p>
+  <p class="fig-sub">Does the model's yes/no/maybe answer match the reference? · greedy decoding</p>
+  <div class="plot" id="chart-acc"></div>
+  <details class="chart-table">
+    <summary>View as table</summary>
+    <table class="data">
+      <tr><th>Model</th><th>Verdict accuracy</th><th style="text-align:left">Note</th></tr>
+      <tr><td>Base (BioMistral-7B)</td><td>0%</td><td style="text-align:left">never emits a verdict</td></tr>
+      <tr><td>+ SFT</td><td>75%</td><td style="text-align:left">learns the format &amp; the answers</td></tr>
+      <tr><td>+ SFT + DPO</td><td>75%</td><td style="text-align:left">preference-aligned</td></tr>
+      <tr><td>+ SFT + GRPO</td><td>75%</td><td style="text-align:left">reward-aligned</td></tr>
+    </table>
+  </details>
+</div>
+
+<h2>The four chapters</h2>
+<ul class="chapters">
+  <li><a href="01-setup.html"><span class="num">01</span><span class="t">The shared starting line</span>
+    Why both methods branch from the same merged SFT model, and the two kinds of signal they optimize.</a></li>
+  <li><a href="02-dpo.html"><span class="num">02</span><span class="t">DPO — learning a preference</span>
+    Chosen vs. rejected pairs, and the surprising way DPO improves: by pushing the bad answer <em>down</em>.</a></li>
+  <li><a href="03-grpo.html"><span class="num">03</span><span class="t">GRPO — a verifiable reward</span>
+    The model grades its own answers against the true verdict, under a KL leash that keeps it near SFT.</a></li>
+  <li><a href="04-comparison.html"><span class="num">04</span><span class="t">Same score, different models</span>
+    The payoff: how DPO drifted and GRPO stayed put, the yes-bias, and the shared <code>maybe</code> blind spot.</a></li>
+</ul>
+
+<p class="foot">Built from the artifacts in <code>medical-llm-RL/</code>: <code>outputs/dpo</code>,
+<code>outputs/grpo</code>, and <code>reports/</code>. The finetuned model is an educational artifact —
+never use it for real medical decisions.</p>
+
+<div class="pager">
+  <a href="https://github.com/jackkeane/medical-llm"><span class="dir">← Prior project</span> Finetuning, visualized</a>
+  <a class="next" href="01-setup.html"><span class="dir">Next →</span> Chapter 1 · The shared starting line</a>
+</div>
+
+<script src="assets/charts.js"></script>
+<script>
+FT.barChart(document.getElementById("chart-acc").closest(".fig"), {
+  ariaLabel: "Bar chart: base model 0% verdict accuracy, SFT 75%, SFT+DPO 75%, SFT+GRPO 75%",
+  max: 100, labelWidth: 168,
+  bars: [
+    { name: "Base (BioMistral-7B)", value: 0, label: "0%", tip: "never emits a verdict", color: "var(--de-emphasis)" },
+    { name: "+ SFT", value: 75, label: "75%", tip: "supervised finetuning" },
+    { name: "+ SFT + DPO", value: 75, label: "75%", tip: "preference alignment" },
+    { name: "+ SFT + GRPO", value: 75, label: "75%", tip: "verifiable-reward alignment" }
+  ]
+});
+</script>
+</div>
+</body>
+</html>

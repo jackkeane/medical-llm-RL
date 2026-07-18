@@ -17,6 +17,23 @@ a verifiable reward) — then compare what each actually does. All on a single R
 Alignment sits *between* SFT and compression on purpose: you align first, then compress,
 so pruning/distillation preserve the aligned behavior.
 
+## 📖 Visual walkthrough (start here)
+
+Open **`docs/index.html`** in any browser — no server needed. Five self-contained pages, every
+chart drawn from this repo's real runs, in the style of the
+[finetuning walkthrough](https://github.com/jackkeane/medical-llm):
+
+| Chapter | What it shows |
+|---|---|
+| [Overview](docs/index.html) | Where alignment sits in the lifecycle + the headline result |
+| [1 · Setup](docs/01-setup.html) | The shared SFT starting point and the two kinds of signal |
+| [2 · DPO](docs/02-dpo.html) | Preference pairs, and how DPO improves by pushing the *rejected* answer down |
+| [3 · GRPO](docs/03-grpo.html) | The generate→score→update loop and the verifiable verdict reward |
+| [4 · Comparison](docs/04-comparison.html) | Same 75%, different models: divergence, yes-bias drift, the `maybe` blind spot |
+
+Static HTML/SVG, no dependencies, light + dark theme — also publishes via GitHub Pages
+(Settings → Pages → deploy from `docs/`).
+
 ## Headline result
 
 Both methods start from the **same merged SFT model** and train a fresh rank-16 LoRA

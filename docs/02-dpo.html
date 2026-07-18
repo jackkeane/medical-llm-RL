@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chapter 2 · DPO — learning a preference — Alignment, visualized</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="wrap">
+
+<header class="site-head">
+  <a class="brand" href="index.html">Alignment, visualized <span>· BioMistral-7B · DPO vs GRPO</span></a>
+  <nav class="site-nav">
+    <a href="index.html">Overview</a>
+    <a href="01-setup.html">1 · Setup</a>
+    <a href="02-dpo.html" aria-current="page">2 · DPO</a>
+    <a href="03-grpo.html">3 · GRPO</a>
+    <a href="04-comparison.html">4 · Comparison</a>
+    <button class="theme-toggle" type="button" aria-label="Switch to dark mode">Dark mode</button>
+  </nav>
+</header>
+
+<p class="kicker">Chapter 2</p>
+<h1>DPO: learning from a preference</h1>
+<p class="lede"><strong>Direct Preference Optimization</strong> is the simplest way to align a model.
+You never write a reward function and you never run the model during training. You just hand it pairs
+of answers — a <em>chosen</em> one and a <em>rejected</em> one — and it adjusts itself to prefer the
+chosen. The interesting part is <em>how</em> it does that, which the chart below catches red-handed.</p>
+
+<div class="tiles">
+  <div class="tile">
+    <div class="label">Preference pairs</div>
+    <div class="value">800</div>
+    <div class="sub">one per training prompt</div>
+  </div>
+  <div class="tile">
+    <div class="label">Chosen answer</div>
+    <div class="value">curated</div>
+    <div class="sub">the PubMedQA reference</div>
+  </div>
+  <div class="tile">
+    <div class="label">Rejected answer</div>
+    <div class="value">base</div>
+    <div class="sub">raw BioMistral output</div>
+  </div>
+  <div class="tile">
+    <div class="label">Reward margin</div>
+    <div class="value">0 → 5.6</div>
+    <div class="sub">chosen pulled clear of rejected</div>
+  </div>
+</div>
+
+<h2>What one training example looks like</h2>
+<p>Each pair uses the same question. The <strong>chosen</strong> answer is the curated reference —
+verdict first, then a tight rationale, then the disclaimer. The <strong>rejected</strong> answer is
+what the <em>raw base model</em> produced for that same question before any finetuning: it continues
+the abstract in the paper's own voice and never actually commits to a verdict.</p>
+
+<div class="sample">
+  <div class="field">
+    <div class="fname"><i style="background:var(--series-1)"></i>Chosen — curated reference</div>
+    <div class="ftext">yes In this population, neither BMI nor neck circumference nor waist circumference is predictive
+    of autoCPAP pressure. Therefore, the previously derived algorithm does not adequately predict the
+    fixed pressure… <em>[+ standard disclaimer]</em></div>
+  </div>
+  <div class="field">
+    <div class="fname"><i style="background:var(--series-3)"></i>Rejected — raw base output</div>
+    <div class="ftext"><em>[IMPACT]</em> The study is a continuation of the previous research, which
+    showed the correlation between obesity and OSA severity. The authors wanted to find out whether
+    this relationship remains in the mo…</div>
+  </div>
+</div>
+
+<p>This is a genuinely easy preference — the two answers barely resemble each other. That matters, and
+Chapter 4 comes back to it. For now, watch what the model does with it.</p>
+
+<h2>How DPO actually improves: it pushes the bad answer down</h2>
+<p>DPO tracks a <strong>reward</strong> for each side of the pair — really just how much more (or less)
+likely the model now finds that answer, compared to the frozen SFT reference. Intuition says training
+should make the <em>chosen</em> answer more attractive. But the SFT model <em>already</em> liked the
+curated answers, so there was little room to push them up. Instead, almost all the work goes into
+shoving the <strong>rejected</strong> answer's reward through the floor:</p>
+
+<div class="fig">
+  <p class="fig-title">DPO reward for the chosen vs. rejected answer</p>
+  <p class="fig-sub">Implicit reward (log-prob shift vs. the SFT reference) over 100 training steps</p>
+  <div class="legend">
+    <span class="key"><i style="background:var(--series-1)"></i> Chosen (curated)</span>
+    <span class="key"><i style="background:var(--series-3)"></i> Rejected (base)</span>
+  </div>
+  <div class="plot" id="chart-dpo"></div>
+  <details class="chart-table">
+    <summary>View as table</summary>
+    <table class="data">
+      <tr><th>Step</th><th>Chosen reward</th><th>Rejected reward</th><th>Margin</th></tr>
+      <tr><td>5</td><td>0.00</td><td>0.01</td><td>-0.00</td></tr>
+      <tr><td>20</td><td>-0.01</td><td>-0.56</td><td>0.56</td></tr>
+      <tr><td>40</td><td>0.01</td><td>-2.95</td><td>2.96</td></tr>
+      <tr><td>60</td><td>-0.08</td><td>-5.22</td><td>5.14</td></tr>
+      <tr><td>80</td><td>-0.13</td><td>-5.86</td><td>5.74</td></tr>
+      <tr><td>100</td><td>-0.22</td><td>-5.79</td><td>5.57</td></tr>
+    </table>
+  </details>
+</div>
+
+<p>The chosen line barely moves; the rejected line falls off a cliff. This is the most important
+intuition about DPO: <strong>it separates chosen from rejected by whatever route is cheapest</strong>,
+and when the reference already prefers the chosen answer, the cheapest route is to punish the rejected
+one. By step 15 the model already prefers chosen over rejected on <strong>100%</strong> of pairs — the
+rest of training just widens an already-decided gap.</p>
+
+<div class="callout warn">
+<strong>An easy preference teaches an easy lesson.</strong> Because "rejected" here is raw base text —
+formatless, verdict-free — the model mostly learns <em>"don't sound like the un-finetuned model."</em>
+That's a style-and-format lesson, not a "get the medical verdict right" lesson. Keep that in mind when
+Chapter 4 shows DPO's verdict accuracy came out flat: it was never really asked to improve verdicts.</div>
+
+<h2>The config, in brief</h2>
+<p>QLoRA (4-bit base + a rank-16 adapter), <code>pref_beta: 0.1</code>, learning rate
+<code>5e-6</code> — about a tenth of the SFT rate, because preference nudges should be gentle — for one
+epoch over the 800 pairs. Around nine minutes on the 4090. The full config is
+<code>configs/dpo.yaml</code>.</p>
+
+<div class="pager">
+  <a href="01-setup.html"><span class="dir">← Previous</span> Chapter 1 · The shared starting line</a>
+  <a class="next" href="03-grpo.html"><span class="dir">Next →</span> Chapter 3 · GRPO</a>
+</div>
+
+<script src="assets/charts.js"></script>
+<script>
+FT.lineChart(document.getElementById("chart-dpo").closest(".fig"), {
+  height: 300,
+  ariaLabel: "Line chart: the chosen-answer reward stays near zero while the rejected-answer reward falls to about minus 5.8 over 100 steps",
+  xDomain: [0, 108], yDomain: [-6.5, 1],
+  xTicks: [0, 25, 50, 75, 100], yTicks: [-6, -4, -2, 0],
+  xLabel: "training step",
+  xTooltip: function (x) { return "Step " + x; },
+  yFmt: function (v) { return v.toFixed(1); },
+  series: [
+    { name: "Chosen", color: "var(--series-1)", points: [[5,0.002],[10,0],[15,-0.005],[20,-0.008],[25,-0.001],[30,0.012],[35,-0.027],[40,0.008],[45,-0.042],[50,-0.054],[55,-0.063],[60,-0.078],[65,-0.089],[70,-0.147],[75,-0.201],[80,-0.125],[85,-0.163],[90,-0.203],[95,-0.128],[100,-0.217]] },
+    { name: "Rejected", color: "var(--series-3)", points: [[5,0.006],[10,-0.033],[15,-0.207],[20,-0.563],[25,-1.053],[30,-1.699],[35,-2.343],[40,-2.954],[45,-3.429],[50,-4.168],[55,-4.367],[60,-5.216],[65,-5.056],[70,-5.552],[75,-5.423],[80,-5.862],[85,-5.52],[90,-5.783],[95,-5.955],[100,-5.785]] }
+  ],
+  endLabels: true,
+  annotations: [
+    { x: 52, y: -1.2, text: "rejected pushed down ↓", anchor: "middle" }
+  ]
+});
+</script>
+</div>
+</body>
+</html>

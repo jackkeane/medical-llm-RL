@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chapter 3 · GRPO — a verifiable reward — Alignment, visualized</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="wrap">
+
+<header class="site-head">
+  <a class="brand" href="index.html">Alignment, visualized <span>· BioMistral-7B · DPO vs GRPO</span></a>
+  <nav class="site-nav">
+    <a href="index.html">Overview</a>
+    <a href="01-setup.html">1 · Setup</a>
+    <a href="02-dpo.html">2 · DPO</a>
+    <a href="03-grpo.html" aria-current="page">3 · GRPO</a>
+    <a href="04-comparison.html">4 · Comparison</a>
+    <button class="theme-toggle" type="button" aria-label="Switch to dark mode">Dark mode</button>
+  </nav>
+</header>
+
+<p class="kicker">Chapter 3</p>
+<h1>GRPO: optimizing a verifiable reward</h1>
+<p class="lede"><strong>Group Relative Policy Optimization</strong> takes the opposite tack from DPO.
+Nobody hands it good and bad answers. The model <em>generates its own</em> answers, a rule
+<strong>scores</strong> each one, and the model shifts toward the answers that scored above their
+peers. When the reward is something you can check by rule — like whether a yes/no/maybe verdict is
+correct — this is a clean, cheat-resistant signal.</p>
+
+<div class="tiles">
+  <div class="tile">
+    <div class="label">Training prompts</div>
+    <div class="value">240</div>
+    <div class="sub">balanced 80 / 80 / 80</div>
+  </div>
+  <div class="tile">
+    <div class="label">Answers per prompt</div>
+    <div class="value">4</div>
+    <div class="sub">a "group" to compare</div>
+  </div>
+  <div class="tile">
+    <div class="label">Reward</div>
+    <div class="value">verdict</div>
+    <div class="sub">+1 if it matches truth</div>
+  </div>
+  <div class="tile">
+    <div class="label">KL to SFT</div>
+    <div class="value">≈0.001</div>
+    <div class="sub">a short leash — stays close</div>
+  </div>
+</div>
+
+<h2>The loop</h2>
+<p>For each prompt the model produces a small <em>group</em> of answers. Each is scored; an answer that
+beats its group's average gets reinforced, one below average gets suppressed. Averaging <em>within the
+group</em> is the trick that removes the need for a separate value network.</p>
+
+<div class="card" style="overflow-x:auto; padding:18px 10px;">
+  <svg viewBox="0 0 720 150" width="720" height="150" role="img" style="min-width:600px; display:block; margin:0 auto;"
+       aria-label="GRPO loop: a prompt generates four answers, each scored by the verdict-match reward, converted to a relative advantage, which updates the adapter">
+    <defs>
+      <marker id="arr3" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+        <path d="M0,0 L8,4 L0,8 Z" fill="var(--baseline)"/>
+      </marker>
+    </defs>
+    <g font-family="system-ui,sans-serif">
+      <rect x="6" y="58" width="118" height="36" rx="9" fill="var(--surface)" stroke="var(--baseline)" stroke-width="1.1"/>
+      <text x="65" y="80" text-anchor="middle" font-size="12.5" font-weight="640" fill="var(--text-primary)">prompt</text>
+      <line x1="126" y1="76" x2="150" y2="76" stroke="var(--baseline)" stroke-width="1.4" marker-end="url(#arr3)"/>
+
+      <!-- 4 generated answers -->
+      <text x="196" y="20" text-anchor="middle" font-size="10.5" fill="var(--text-muted)">generate 4</text>
+      <rect x="154" y="26" width="112" height="22" rx="6" fill="var(--accent-wash)" stroke="var(--series-1)" stroke-width="1"/>
+      <text x="210" y="41" text-anchor="middle" font-size="11" fill="var(--text-primary)">answer · yes ✓</text>
+      <rect x="154" y="52" width="112" height="22" rx="6" fill="var(--accent-wash)" stroke="var(--series-1)" stroke-width="1"/>
+      <text x="210" y="67" text-anchor="middle" font-size="11" fill="var(--text-primary)">answer · no ✗</text>
+      <rect x="154" y="78" width="112" height="22" rx="6" fill="var(--accent-wash)" stroke="var(--series-1)" stroke-width="1"/>
+      <text x="210" y="93" text-anchor="middle" font-size="11" fill="var(--text-primary)">answer · yes ✓</text>
+      <rect x="154" y="104" width="112" height="22" rx="6" fill="var(--accent-wash)" stroke="var(--series-1)" stroke-width="1"/>
+      <text x="210" y="119" text-anchor="middle" font-size="11" fill="var(--text-primary)">answer · maybe ✗</text>
+      <line x1="268" y1="76" x2="292" y2="76" stroke="var(--baseline)" stroke-width="1.4" marker-end="url(#arr3)"/>
+
+      <rect x="296" y="58" width="118" height="36" rx="9" fill="var(--surface)" stroke="var(--baseline)" stroke-width="1.1"/>
+      <text x="355" y="74" text-anchor="middle" font-size="12" font-weight="640" fill="var(--text-primary)">reward each</text>
+      <text x="355" y="88" text-anchor="middle" font-size="10" fill="var(--text-muted)">+1 correct verdict</text>
+      <line x1="416" y1="76" x2="440" y2="76" stroke="var(--baseline)" stroke-width="1.4" marker-end="url(#arr3)"/>
+
+      <rect x="444" y="58" width="130" height="36" rx="9" fill="var(--surface)" stroke="var(--baseline)" stroke-width="1.1"/>
+      <text x="509" y="74" text-anchor="middle" font-size="12" font-weight="640" fill="var(--text-primary)">advantage</text>
+      <text x="509" y="88" text-anchor="middle" font-size="10" fill="var(--text-muted)">vs. group average</text>
+      <line x1="576" y1="76" x2="600" y2="76" stroke="var(--baseline)" stroke-width="1.4" marker-end="url(#arr3)"/>
+
+      <rect x="604" y="58" width="110" height="36" rx="9" fill="var(--accent-wash)" stroke="var(--series-1)" stroke-width="1.1"/>
+      <text x="659" y="74" text-anchor="middle" font-size="12" font-weight="640" fill="var(--text-primary)">update</text>
+      <text x="659" y="88" text-anchor="middle" font-size="10" fill="var(--text-muted)">the adapter</text>
+      <!-- feedback arrow back to prompt -->
+      <path d="M659,96 L659,134 L65,134 L65,96" fill="none" stroke="var(--baseline)" stroke-width="1.2" stroke-dasharray="3 3" marker-end="url(#arr3)"/>
+      <text x="360" y="130" text-anchor="middle" font-size="10.5" fill="var(--text-muted)">next batch of prompts</text>
+    </g>
+  </svg>
+</div>
+
+<h2>The reward is just a rule</h2>
+<p>No neural reward model, no human labels at training time — the reward is a few lines that read the
+answer and check it against the known verdict. The verifiable part (does the verdict match?) carries
+the signal; a small format bonus keeps answers verdict-first.</p>
+
+<pre><code><span class="c"># PubMedQA gives us a checkable answer, so the reward can be a rule:</span>
+reward = <span class="hl">1.0</span>  <span class="k">if</span> verdict(answer) == reference_verdict   <span class="c"># the real signal</span>
+       + <span class="hl">0.2</span>  <span class="k">if</span> answer starts with a verdict at all     <span class="c"># light shaping</span></code></pre>
+
+<p>The 240 training prompts are deliberately balanced — 80 <code>yes</code>, 80 <code>no</code>,
+80 <code>maybe</code> — so the model can't farm reward by always guessing the majority class.</p>
+
+<h2>What the reward did over training</h2>
+<p>Here is the honest curve. With only four prompts per step, the per-step reward is noisy, so this
+shows it averaged over windows. It <strong>hovers near where it started</strong> rather than climbing:</p>
+
+<div class="fig">
+  <p class="fig-title">GRPO verdict-match reward over training</p>
+  <p class="fig-sub">Fraction of generated answers with the correct verdict · averaged over 10-step windows</p>
+  <div class="plot" id="chart-grpo"></div>
+  <details class="chart-table">
+    <summary>View as table</summary>
+    <table class="data">
+      <tr><th>Steps</th><th>Avg. correct-verdict reward</th><th>Avg. KL to SFT</th></tr>
+      <tr><td>1–10</td><td>0.60</td><td>0.0003</td></tr>
+      <tr><td>11–20</td><td>0.70</td><td>0.0006</td></tr>
+      <tr><td>21–30</td><td>0.67</td><td>0.0007</td></tr>
+      <tr><td>31–40</td><td>0.60</td><td>0.0008</td></tr>
+      <tr><td>41–50</td><td>0.64</td><td>0.0008</td></tr>
+      <tr><td>51–60</td><td>0.60</td><td>0.0009</td></tr>
+    </table>
+  </details>
+</div>
+
+<p>Two things hold it flat. First, the <strong>KL leash</strong>: GRPO is penalized for drifting from
+the SFT reference, and that penalty stayed near <code>0.001</code> the whole run — the policy barely
+moved. Second, the <strong>budget</strong>: 60 steps of four prompts is a small amount of signal for a
+7B model. So a flat reward here means "didn't move far," which is <em>by design</em> as much as it is a
+limit — Chapter 4 shows exactly how little the verdicts changed.</p>
+
+<div class="callout">
+<strong>Why bf16 LoRA and not 4-bit here?</strong> GRPO generates answers <em>during</em> training, and
+in this stack the generation step trips over 4-bit quantized weights. So the GRPO policy runs in bf16
+(still a small rank-16 adapter on a frozen base, still one 24&nbsp;GB GPU). DPO, which never generates,
+kept the 4-bit QLoRA setup. A small asymmetry worth naming.</div>
+
+<div class="pager">
+  <a href="02-dpo.html"><span class="dir">← Previous</span> Chapter 2 · DPO</a>
+  <a class="next" href="04-comparison.html"><span class="dir">Next →</span> Chapter 4 · The comparison</a>
+</div>
+
+<script src="assets/charts.js"></script>
+<script>
+FT.lineChart(document.getElementById("chart-grpo").closest(".fig"), {
+  height: 280,
+  ariaLabel: "Line chart: GRPO's correct-verdict reward stays around 0.6 to 0.7 across the run, not climbing",
+  xDomain: [0, 62], yDomain: [0, 1.05],
+  xTicks: [0, 15, 30, 45, 60], yTicks: [0, 0.25, 0.5, 0.75, 1.0],
+  xLabel: "training step",
+  xTooltip: function (x) { return "Step ≈ " + x; },
+  yFmt: function (v) { return v.toFixed(2); },
+  series: [
+    { name: "reward", color: "var(--series-2)", markers: true,
+      points: [[5,0.60],[15,0.70],[25,0.669],[35,0.60],[45,0.644],[55,0.60]] }
+  ],
+  endLabels: true,
+  annotations: [
+    { x: 30, y: 0.9, text: "flat — hovering near the start", anchor: "middle" }
+  ]
+});
+</script>
+</div>
+</body>
+</html>

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chapter 4 · Same score, different models — Alignment, visualized</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="wrap">
+
+<header class="site-head">
+  <a class="brand" href="index.html">Alignment, visualized <span>· BioMistral-7B · DPO vs GRPO</span></a>
+  <nav class="site-nav">
+    <a href="index.html">Overview</a>
+    <a href="01-setup.html">1 · Setup</a>
+    <a href="02-dpo.html">2 · DPO</a>
+    <a href="03-grpo.html">3 · GRPO</a>
+    <a href="04-comparison.html" aria-current="page">4 · Comparison</a>
+    <button class="theme-toggle" type="button" aria-label="Switch to dark mode">Dark mode</button>
+  </nav>
+</header>
+
+<p class="kicker">Chapter 4</p>
+<h1>Same score, different models</h1>
+<p class="lede">All three finetuned models score <strong>75%</strong> verdict accuracy on the 100
+held-out questions. If you stopped there you'd conclude the two alignment methods did nothing. They did
+plenty — just not to the headline number. This chapter measures what each one <em>actually</em> changed,
+question by question.</p>
+
+<h2>The identical headline</h2>
+<div class="fig">
+  <p class="fig-title">Verdict accuracy on 100 held-out questions</p>
+  <p class="fig-sub">SFT creates the capability; both alignment methods hold the line</p>
+  <div class="plot" id="chart-acc"></div>
+  <details class="chart-table">
+    <summary>View as table</summary>
+    <table class="data">
+      <tr><th>Model</th><th>Verdict accuracy</th></tr>
+      <tr><td>Base (BioMistral-7B)</td><td>0%</td></tr>
+      <tr><td>+ SFT</td><td>75%</td></tr>
+      <tr><td>+ SFT + DPO</td><td>75%</td></tr>
+      <tr><td>+ SFT + GRPO</td><td>75%</td></tr>
+    </table>
+  </details>
+</div>
+
+<h2>How far each method moved from SFT</h2>
+<p>Compare each aligned model to SFT one question at a time and the two methods look nothing alike.
+<strong>DPO rewrote most of the answers</strong> and overturned a chunk of verdicts. <strong>GRPO barely
+budged</strong> — its KL leash (Chapter 3) held it close to SFT.</p>
+
+<div class="fig">
+  <p class="fig-title">Difference from the SFT model, per 100 answers</p>
+  <p class="fig-sub">How many answers changed text, and how many changed their yes/no/maybe verdict</p>
+  <div class="legend">
+    <span class="key"><i class="swatch" style="background:var(--series-1)"></i> DPO</span>
+    <span class="key"><i class="swatch" style="background:var(--series-3)"></i> GRPO</span>
+  </div>
+  <div class="plot" id="chart-div"></div>
+  <details class="chart-table">
+    <summary>View as table</summary>
+    <table class="data">
+      <tr><th>Measure (vs SFT)</th><th>DPO</th><th>GRPO</th></tr>
+      <tr><td>Answers reworded /100</td><td>78</td><td>40</td></tr>
+      <tr><td>Verdicts changed /100</td><td>11</td><td>2</td></tr>
+    </table>
+  </details>
+</div>
+
+<p>GRPO's correct-answer set is in fact <em>identical</em> to SFT's — same 75 questions right, same 25
+wrong, just reworded on 40 of them. DPO's is not: it swapped 5 questions in for 5 others, netting zero.</p>
+
+<h2>DPO drifted toward "yes"</h2>
+<p>When DPO rewrote answers, it didn't do so evenly. The reference set is 60 <code>yes</code> / 31
+<code>no</code> / 9 <code>maybe</code>, and SFT roughly tracks that. DPO tilted the whole model toward
+answering <strong>yes</strong> — a well-known side effect of preference optimization shifting the output
+distribution. GRPO kept SFT's balance.</p>
+
+<div class="fig">
+  <p class="fig-title">How many of the 100 answers were "yes"</p>
+  <p class="fig-sub">The true count is 60 · SFT and GRPO stay near it, DPO overshoots to 70</p>
+  <div class="plot" id="chart-yes"></div>
+  <details class="chart-table">
+    <summary>View as table</summary>
+    <table class="data">
+      <tr><th>Model</th><th>yes</th><th>no</th><th>maybe</th></tr>
+      <tr><td>Reference (truth)</td><td>60</td><td>31</td><td>9</td></tr>
+      <tr><td>SFT</td><td>59</td><td>38</td><td>3</td></tr>
+      <tr><td>DPO</td><td>70</td><td>30</td><td>0</td></tr>
+      <tr><td>GRPO</td><td>59</td><td>37</td><td>4</td></tr>
+    </table>
+  </details>
+</div>
+
+<p>That drift shows up in the per-class recall too: DPO traded away correct <code>no</code> answers
+(26 → 21) to gain correct <code>yes</code> answers (49 → 54). A wash on the total, a real change in
+character.</p>
+
+<div class="fig">
+  <p class="fig-title">Per-class recall — correct answers of each true class</p>
+  <table class="data" style="margin-top:4px">
+    <tr><th style="text-align:left">Model</th><th>yes (of 60)</th><th>no (of 31)</th><th>maybe (of 9)</th></tr>
+    <tr><td style="text-align:left">SFT</td><td>49</td><td>26</td><td>0</td></tr>
+    <tr><td style="text-align:left">DPO</td><td>54</td><td>21</td><td>0</td></tr>
+    <tr><td style="text-align:left">GRPO</td><td>49</td><td>26</td><td>0</td></tr>
+  </table>
+</div>
+
+<div class="callout warn">
+<strong>The shared blind spot:</strong> every model scores <strong>0 of 9</strong> on <code>maybe</code>.
+It's the rarest class — 90 of 800 training examples (11%), and just 9 of the 100 test items — and none
+of SFT, DPO, or GRPO ever gets one right. With only 9 test cases treat this as a qualitative flag, not a
+precise rate; still, <em>this</em>, not the yes/no split, is where more data or a class-aware reward
+would help most.</div>
+
+<h2>One question, both behaviors</h2>
+<p>The contrast in a single example. GRPO's answer is byte-for-byte identical to SFT's (the leash held);
+DPO rewrote the same answer into its own tighter phrasing. All three land on the correct verdict here.</p>
+
+<div class="sample">
+  <div class="field">
+    <div class="fname">Q · reference verdict <code>no</code></div>
+    <div class="ftext">Does increasing blood pH stimulate protein synthesis in dialysis patients?</div>
+  </div>
+  <div class="field">
+    <div class="fname"><i style="background:var(--de-emphasis)"></i>SFT &nbsp;=&nbsp; GRPO (identical)</div>
+    <div class="ftext"><strong>no</strong> In patients on hemodialysis, oral NaHCO(3) supplementation
+    induced a significant increase in serum bicarbonate and blood pH, but did not change protein
+    synthesis rates or nutritional parameters…</div>
+  </div>
+  <div class="field">
+    <div class="fname"><i style="background:var(--series-1)"></i>DPO (reworded)</div>
+    <div class="ftext"><strong>no</strong> Increasing blood pH by oral NaHCO(3) supplementation does
+    not stimulate protein synthesis in patients on hemodialysis. <em>[Based on published research.
+    Consult healthcare provider.]</em></div>
+  </div>
+</div>
+
+<h2>How to read this</h2>
+<p>This is a compact educational demonstration, not a benchmark. Before generalizing any number above:</p>
+<div class="card">
+<ul style="margin:0">
+  <li><strong>One run, no seeds or error bars.</strong> At n=100, a 75% rate has a 95% interval of
+  roughly 66–84%. "No accuracy change" means <em>not detectable here</em>, not <em>proven equal</em>.
+  The <code>maybe</code> class is n=9 — its 0/9 is a flag, not a measurement.</li>
+  <li><strong>Verdict-only metric.</strong> Accuracy scores just the leading yes/no/maybe token; it
+  says nothing about whether the rationale is faithful — exactly where DPO's rewriting might help or
+  hurt.</li>
+  <li><strong>The two methods optimized different things.</strong> GRPO's reward <em>is</em> verdict
+  correctness; DPO's preference was only "look like the curated answer, not raw base output." So
+  comparing them on verdict accuracy is partly apples-to-oranges — DPO was never really asked to fix
+  verdicts.</li>
+</ul>
+</div>
+
+<h2>Takeaways</h2>
+<ol>
+  <li><strong>SFT did the heavy lifting.</strong> Base → SFT is 0% → 75%; the base model never even
+  emits a verdict. Alignment starts from an already-capable model.</li>
+  <li><strong>Here, RL didn't move the headline.</strong> On a 7B model with a small budget and a
+  verdict-only metric, SFT had already extracted what a short run recovers. Read that as a fact about
+  <em>this setup</em>, not a law about RL.</li>
+  <li><strong>The signal shapes the change.</strong> DPO (a preference) rewrote style and shifted the
+  distribution; GRPO (a verifiable reward under a KL leash) stayed anchored. Same score, different
+  failure modes — the real lesson.</li>
+  <li><strong>Where to push next:</strong> the <code>maybe</code> class (0/9) — more <code>maybe</code>
+  data, a class-balanced reward, more GRPO steps at a looser leash, or DPO pairs built from
+  <em>wrong-verdict</em> rejections instead of raw base output.</li>
+</ol>
+
+<p class="foot">Numbers from <code>reports/comparison.md</code> and <code>reports/metrics.json</code>,
+independently re-verified. The finetuned model is an educational artifact — never use it for real
+medical decisions.</p>
+
+<div class="pager">
+  <a href="03-grpo.html"><span class="dir">← Previous</span> Chapter 3 · GRPO</a>
+  <a class="next" href="index.html"><span class="dir">Back to</span> Overview</a>
+</div>
+
+<script src="assets/charts.js"></script>
+<script>
+FT.barChart(document.getElementById("chart-acc").closest(".fig"), {
+  ariaLabel: "Bar chart: base 0%, SFT 75%, DPO 75%, GRPO 75%",
+  max: 100, labelWidth: 168,
+  bars: [
+    { name: "Base (BioMistral-7B)", value: 0, label: "0%", tip: "never emits a verdict", color: "var(--de-emphasis)" },
+    { name: "+ SFT", value: 75, label: "75%", tip: "supervised finetuning" },
+    { name: "+ SFT + DPO", value: 75, label: "75%", tip: "preference alignment" },
+    { name: "+ SFT + GRPO", value: 75, label: "75%", tip: "verifiable-reward alignment" }
+  ]
+});
+FT.barChart(document.getElementById("chart-div").closest(".fig"), {
+  ariaLabel: "Bar chart: DPO reworded 78 of 100 answers and changed 11 verdicts; GRPO reworded 40 and changed 2",
+  max: 100, labelWidth: 168,
+  bars: [
+    { name: "DPO — reworded", value: 78, label: "78", color: "var(--series-1)", tip: "of 100 differ from SFT" },
+    { name: "GRPO — reworded", value: 40, label: "40", color: "var(--series-3)", tip: "of 100 differ from SFT" },
+    { name: "DPO — verdict flips", value: 11, label: "11", color: "var(--series-1)", tip: "verdict changed vs SFT" },
+    { name: "GRPO — verdict flips", value: 2, label: "2", color: "var(--series-3)", tip: "verdict changed vs SFT" }
+  ]
+});
+FT.barChart(document.getElementById("chart-yes").closest(".fig"), {
+  ariaLabel: "Bar chart of how many answers were yes: reference 60, SFT 59, DPO 70, GRPO 59",
+  max: 100, labelWidth: 168,
+  bars: [
+    { name: "Reference (truth)", value: 60, label: "60", color: "var(--de-emphasis)", tip: "true yes count" },
+    { name: "SFT", value: 59, label: "59", color: "var(--de-emphasis)", tip: "predicted yes" },
+    { name: "DPO", value: 70, label: "70", color: "var(--series-1)", tip: "predicted yes — overshoots" },
+    { name: "GRPO", value: 59, label: "59", color: "var(--series-3)", tip: "predicted yes" }
+  ]
+});
+</script>
+</div>
+</body>
+</html>
